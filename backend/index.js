@@ -1,30 +1,98 @@
-const express = require('express');
-const cors = require('cors');
+/**
+ * VibeCheck API (CPE 411L)
+ *
+ * This server:
+ * - runs on your computer (localhost)
+ * - listens on a port (default: 3000)
+ * - responds to browser requests (endpoints) using JSON
+ */
+
+const express = require("express");
+const cors = require("cors");
+
 const app = express();
+const PORT = 3000;
+
+// CORS lets your frontend page call your backend API.
 app.use(cors());
+
+// This allows Express to read JSON bodies (used for POST requests).
 app.use(express.json());
 
-let smashCounter = 0;
+// Data pools (random picks). You can customize these.
+const fortunes = [
+  "manifesting mabilis ang data sa 2nd floor coe2",
+  "ang next commit mo ay goods.",
+  "ohhg no wala kang fortune.",
+  "your fortune is wow ganda fortune cookie random words go brrr",
+];
 
-const fortunes = ["You will have a great day!", "Something awesome is coming!"];
-const jokes = ["Why did the chicken cross the road? To get to the other side!", "I told my computer I needed a break... it said no."];
+const jokes = [
+  "haha eto joke",
+  "whats the difference of a catholic priest and a pimple? hulaan mo",
+  "my whole life is a joke",
+];
 
-app.get('/api/fortune', (req, res) => {
-  res.json({ fortune: fortunes[Math.floor(Math.random() * fortunes.length)] });
+const vibeMap = {
+  happy: { emoji: "😄", message: "Keep going gagraduate ka rin!" },
+  tired: { emoji: "🥱", message: "commit, nagkamali, refresh, save, commit, push" },
+  stressed: { emoji: "😵‍💫", message: "vibe ko ngayon ay mainit ang ulo dahil sa data sa 2nd floor coe 2" },
+};
+
+// Smash counter (stored in memory for now)
+let smashes = 0;
+
+// GET /api/fortune -> returns one random fortune
+app.get("/api/fortune", (req, res) => {
+  const pick = fortunes[Math.floor(Math.random() * fortunes.length)];
+  res.json({ fortune: pick });
 });
 
-app.get('/api/joke', (req, res) => {
-  res.json({ joke: jokes[Math.floor(Math.random() * jokes.length)] });
+// GET /api/joke -> returns one random joke
+app.get("/api/joke", (req, res) => {
+  const pick = jokes[Math.floor(Math.random() * jokes.length)];
+  res.json({ joke: pick });
 });
 
-app.get('/api/vibe', (req, res) => {
-  const mood = req.query.mood || "neutral";
-  res.json({ mood: mood, vibe: `Your vibe is ${mood}!` });
+// GET /api/vibe?mood=happy|tired|stressed
+app.get("/api/vibe", (req, res) => {
+  const mood = (req.query.mood || "").toLowerCase();
+  const vibe = vibeMap[mood];
+
+  if (!vibe) {
+    return res.json({
+      mood: mood || "unknown",
+      emoji: "🤔",
+      message: "Try mood=happy, tired, or stressed.",
+    });
+  }
+
+  res.json({ mood, ...vibe });
 });
 
-app.post('/api/smash', (req, res) => {
-  smashCounter++;
-  res.json({ smashed: smashCounter });
+// POST /api/smash -> increases counter and returns the updated value
+app.post("/api/smash", (req, res) => {
+  smashes += 1;
+  res.json({ smashes });
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+// GET /api/smashes -> returns current counter
+app.get("/api/smashes", (req, res) => {
+  res.json({ smashes });
+});
+
+// GET /api/secret?code=411L -> hidden message if code is correct
+app.get("/api/secret", (req, res) => {
+  const code = req.query.code;
+
+  if (code === "411L") {
+    return res.json({ message: "🎉 Secret unlocked: MAGKAKATRABAHO KA!" });
+  }
+
+  res.status(403).json({ message: "Nope 😄 Try code=411L" });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`VibeCheck API running at http://localhost:${PORT}`);
+});
