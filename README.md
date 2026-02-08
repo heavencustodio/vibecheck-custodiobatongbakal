@@ -26,49 +26,50 @@ VibeCheck-<yourname>/
 ```bash
 npm init -y
 npm install express cors
-
+```
 3. Start the server:
 
 ```bash
 node index.js
-
+```
 Expected output:
 ```bash
-VibeCheck API running at http://localhost:3000
 
+VibeCheck API running at http://localhost:3000
+```
 Backend API Endpoints
 
 GET /api/fortune
 Returns a random fortune. Example:
 ```bash
 { "fortune": "ang next commit mo ay goods" }
-
+```
 GET /api/joke
 Returns a random joke. Example:
 ```bash
 { "joke": "haha eto joke." }
-
+```
 GET /api/vibe?mood=happy|tired|stressed
 Returns mood emoji and message. Example:
 ```bash
 tired: { emoji: "🥱", message: "commit, nagkamali, refresh, save, commit, push" }
-
+```
 POST /api/smash
 Increments counter and returns current smashes. Example:
 ```bash
 { "smashes": 1 }
-
+```
 GET /api/smashes
 Returns current smash counter. Example:
 ```bash
 { "smashes": 1 }
-
+```
 
 GET /api/secret?code=411L
 Returns hidden message if code is correct. Example:
 ```bash
 { message: "🎉 Secret unlocked: MAGKAKATRABAHO KA!" }
-
+```
 Frontend Setup
 1. Open frontend/index.html in a browser.
 2. Make sure backend is running.
