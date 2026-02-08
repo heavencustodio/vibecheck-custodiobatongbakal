@@ -80,7 +80,7 @@ Frontend Setup
     - Smash 💥
     - Secret 🕵️
 
-Output appears in the <pre> area on the page.
+Output appears in the pre-area on the page.
 
 ---
 GitHub Workflow
